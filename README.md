@@ -2,7 +2,7 @@ pia-firewalla.sh - A script to set up and configure PIA WireGuard on Firewalla
 #
 
 # ========================================================
-# **USAGE:**
+# USAGE:
 #
 # This script automates the setup of **Private Internet Access (PIA) WireGuard VPN** on Firewalla.
 #
