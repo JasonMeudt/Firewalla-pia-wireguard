@@ -107,6 +107,7 @@ Pull requests and improvements are welcome! If you find issues, please open an i
 
 - [Private Internet Access (PIA) WireGuard Setup](https://www.privateinternetaccess.com/)
 - [Firewalla Official Site](https://firewalla.com/)
+- [Private Internet Access wireguard shell scripts github](https://github.com/triffid/pia-wg)
 
 ---
 
