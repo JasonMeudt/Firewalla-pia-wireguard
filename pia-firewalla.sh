@@ -39,7 +39,7 @@ set -euo pipefail  # Exit on errors, prevent uninitialized variables
 # --- Configuration Variables ---
 REPO_URL="https://github.com/triffid/pia-wg.git"
 REPO_DIR="/home/pi/pia-wg"
-PIAWG_SCRIPT="wg-pia.sh"
+PIAWG_SCRIPT="pia-wg.sh"
 PIA_CONFIG_SOURCE="/home/pi/.config/pia-wg/pia.conf"
 LOG_FILE="/tmp/pia-wg-output.log"
 
@@ -119,7 +119,7 @@ log "Copying WireGuard configuration to Firewalla..."
 cp -f "$PIA_CONFIG_SOURCE" "$DEST1/$FINAL_NAME"
 cp -f "$PIA_CONFIG_SOURCE" "$DEST2/$FINAL_NAME"
 
-# --- Step 7: Generate Firewalla JSON Configuration ---
+# --- Step 7: Generate Firewalla JSON and Settings Configuration ---
 generate_json_from_conf() {
     local conf_file="$1"
     local json_file="${conf_file%.conf}.json"
@@ -153,8 +153,31 @@ generate_json_from_conf() {
     log "JSON saved to $json_file"
 }
 
+generate_settings_file() {
+    local conf_file="$1"
+    local settings_file="${conf_file%.conf}.settings"
+
+    log "Generating Settings file for $conf_file..."
+
+    local timestamp=$(date +%s.%N)  # Get the current timestamp with nanoseconds
+
+    local settings="{
+    \"serverSubnets\": [],
+    \"overrideDefaultRoute\": true,
+    \"routeDNS\": true,
+    \"strictVPN\": true,
+    \"createdDate\": $timestamp,
+    \"subtype\": \"wireguard\"
+    }"
+
+    echo "$settings" > "$settings_file"
+    log "Settings saved to $settings_file"
+}
+
 generate_json_from_conf "$DEST1/$FINAL_NAME"
 generate_json_from_conf "$DEST2/$FINAL_NAME"
+generate_settings_file "$DEST1/$FINAL_NAME"
+generate_settings_file "$DEST2/$FINAL_NAME"
 
 log "Setup complete. WireGuard configuration copied as $FINAL_NAME."
 exit 0
